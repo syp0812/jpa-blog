@@ -42,7 +42,7 @@ public class BoardService {
                 () -> new BlogException(BlogExceptionType.NO_AUTHORITY_UPDATE_BOARD)
         );
 
-        board.update(requestDto, member);
+        board.update(requestDto);
         return new BoardResponseDto(board);
     }
 
