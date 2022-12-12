@@ -1,16 +1,18 @@
 package jpacrud.blog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpacrud.blog.dto.BoardRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Board extends BaseTime{
 
     @Id
@@ -23,9 +25,14 @@ public class Board extends BaseTime{
     @Column(nullable = false)
     private String content;
 
-    @JoinColumn(name = "member_id")
     @ManyToOne
+    @JoinColumn(name = "member_id")
     private Member member;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OrderBy("createdAt desc")
+    private List<Comment> comments = new ArrayList<>();
 
     public Board(BoardRequestDto requestDto) {
         this.title = requestDto.getTitle();
@@ -38,9 +45,8 @@ public class Board extends BaseTime{
         this.member = member;
     }
 
-    public void update(BoardRequestDto requestDto, Member member) {
+    public void update(BoardRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
-        this.member = member;
     }
 }
