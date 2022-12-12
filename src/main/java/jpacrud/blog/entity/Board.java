@@ -2,7 +2,6 @@ package jpacrud.blog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpacrud.blog.dto.BoardRequestDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,6 +32,10 @@ public class Board extends BaseTime{
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     @OrderBy("createdAt desc")
     private List<Comment> comments = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<BoardLike> boardLikes = new ArrayList<>();
 
     public Board(BoardRequestDto requestDto) {
         this.title = requestDto.getTitle();
