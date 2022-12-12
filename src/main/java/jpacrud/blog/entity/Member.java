@@ -37,6 +37,11 @@ public class Member {
 //    @OrderBy("createdAt desc")
     private List<Comment> comments = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<BoardLike> boardLikes = new ArrayList<>();
+
+
     public Member(String username, String password, MemberRole role) {
         this.username = username;
         this.password = password;
