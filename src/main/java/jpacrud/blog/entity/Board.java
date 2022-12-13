@@ -24,11 +24,11 @@ public class Board extends BaseTime{
     @Column(nullable = false)
     private String content;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     @OrderBy("createdAt desc")
     private List<Comment> comments = new ArrayList<>();
