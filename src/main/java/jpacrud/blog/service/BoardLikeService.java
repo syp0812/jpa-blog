@@ -32,13 +32,17 @@ public class BoardLikeService {
         Optional<BoardLike> like = boardLikeRepository.findByBoardAndMember(board, member);
 
         // 이미 ‘좋아요’한 게시글에 다시 요청을 하면 ‘좋아요’를 했던 기록이 취소
-        if(like.isPresent()) {
-            BoardLike boardLike = boardLikeRepository.findByBoardIdAndMemberId(boardId, member.getId());
-            boardLikeRepository.delete(boardLike);
+        if(checkDuplicate(board, member)) {
+            boardLikeRepository.delete(like.get());
         }
         else {
             BoardLike boardLike = new BoardLike(member, board);
             boardLikeRepository.save(boardLike);
         }
+    }
+
+    // 좋아요 중복 확인
+    private boolean checkDuplicate(Board board, Member member) {
+        return boardLikeRepository.findByBoardAndMember(board, member).isPresent();
     }
 }
