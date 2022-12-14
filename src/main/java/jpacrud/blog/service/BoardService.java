@@ -63,8 +63,9 @@ public class BoardService {
      * 전체 게시글 목록 조회
      */
     @Transactional(readOnly = true)
-    public Page<Board> getBoards(Pageable pageable) {
-        return boardRepository.findAll(pageable);
+    public Page<BoardResponseDto> getBoards(Pageable pageable) {
+        Page<Board> boards = boardRepository.findAll(pageable);
+        return boards.map(e -> new BoardResponseDto(e));
     }
 
     /**

@@ -30,8 +30,7 @@ public class CommentLikeService {
         Optional<CommentLike> like = commentLikeRepository.findByCommentAndMember(comment, member);
 
         if(like.isPresent()) {
-            CommentLike commentLike = commentLikeRepository.findByCommentIdAndMemberId(commentId, member.getId());
-            commentLikeRepository.delete(commentLike);
+            commentLikeRepository.delete(like.get());
         }
         else {
             CommentLike commentLike = new CommentLike(member, comment.getBoard(), comment);
