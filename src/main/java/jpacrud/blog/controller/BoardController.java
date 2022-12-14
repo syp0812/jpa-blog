@@ -46,9 +46,8 @@ public class BoardController {
     }
 
     @GetMapping("/boards")
-    public Page<Board> getBoards(Pageable pageable) {
-        Page<Board> boards = boardService.getBoards(pageable);
-        return boards;
+    public Page<BoardResponseDto> getBoards(Pageable pageable) {
+        return boardService.getBoards(pageable);
     }
 
     @GetMapping("/boards/{id}")
