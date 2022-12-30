@@ -3,8 +3,8 @@ package jpacrud.blog.service;
 import jpacrud.blog.dto.MemberRequestDto;
 import jpacrud.blog.entity.Member;
 import jpacrud.blog.entity.MemberRole;
-import jpacrud.blog.exception.BlogException;
-import jpacrud.blog.exception.BlogExceptionType;
+import jpacrud.blog.exception.CustomException;
+import jpacrud.blog.exception.CustomExceptionType;
 import jpacrud.blog.jwt.JwtUtil;
 import jpacrud.blog.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,14 +40,14 @@ public class MemberService {
         // 회원 중복 확인
         Optional<Member> found = memberRepository.findByUsername(username);
         if (found.isPresent()) {
-            throw new BlogException(BlogExceptionType.ALREADY_EXISTS_USERNAME);
+            throw new CustomException(CustomExceptionType.ALREADY_EXISTS_USERNAME);
         }
 
         // 사용자 ROLE 확인
         MemberRole role = MemberRole.USER;
         if (requestDto.isAdmin()) {
             if (!requestDto.getAdminToken().equals(ADMIN_TOKEN)) {
-                throw new BlogException(BlogExceptionType.WRONG_PASSWORD);
+                throw new CustomException(CustomExceptionType.WRONG_PASSWORD);
             }
             role = MemberRole.ADMIN;
         }
@@ -68,12 +68,11 @@ public class MemberService {
 
         // 사용자 확인
         Member member = memberRepository.findByUsername(username)
-//                .filter(m -> m.getPassword().equals(password))
-                .orElseThrow(() -> new BlogException(BlogExceptionType.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(CustomExceptionType.MEMBER_NOT_FOUND));
 
         // 비밀번호 확인
         if(!passwordEncoder.matches(password, member.getPassword())) {
-            throw new BlogException(BlogExceptionType.WRONG_PASSWORD);
+            throw new CustomException(CustomExceptionType.WRONG_PASSWORD);
         }
 
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(member.getUsername(), member.getRole()));

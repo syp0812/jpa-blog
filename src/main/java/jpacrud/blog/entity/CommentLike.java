@@ -24,14 +24,8 @@ public class CommentLike {
     @JoinColumn(name = "comment_id", nullable = false)
     private Comment comment;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "board_id", nullable = false)
-    private Board board;
-
-    public CommentLike(Member member, Board board, Comment comment) {
+    public CommentLike(Member member, Comment comment) {
         this.member = member;
-        this.board = board;
         this.comment = comment;
     }
 }

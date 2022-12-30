@@ -2,7 +2,7 @@ package jpacrud.blog.exception;
 
 import org.springframework.http.HttpStatus;
 
-public enum BlogExceptionType implements BaseExceptionType{
+public enum CustomExceptionType implements BaseExceptionType{
 
     ALREADY_EXISTS_USERNAME(600, HttpStatus.OK, "이미 존재하는 계정입니다."),
     WRONG_PASSWORD(601, HttpStatus.OK, "비밀번호가 일치하지 않습니다."),
@@ -20,7 +20,7 @@ public enum BlogExceptionType implements BaseExceptionType{
     private HttpStatus httpStatus;
     private String errorMessage;
 
-    BlogExceptionType(int errorCode, HttpStatus httpStatus, String errorMessage) {
+    CustomExceptionType(int errorCode, HttpStatus httpStatus, String errorMessage) {
         this.errorCode = errorCode;
         this.httpStatus = httpStatus;
         this.errorMessage = errorMessage;

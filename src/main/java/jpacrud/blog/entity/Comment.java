@@ -2,6 +2,7 @@ package jpacrud.blog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpacrud.blog.dto.CommentRequestDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,19 +27,18 @@ public class Comment extends BaseTime {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private List<CommentLike> commentLikes = new ArrayList<>();
 
-    public Comment(CommentRequestDto requestDto, Board board, Member member) {
+    @Builder
+    public Comment(String content, Board board, Member member) {
         this.member = member;
         this.board = board;
-        this.content = requestDto.getContent();
+        this.content = content;
         this.commentLike = commentLikes.size();
     }
 

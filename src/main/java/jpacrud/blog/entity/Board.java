@@ -2,6 +2,8 @@ package jpacrud.blog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpacrud.blog.dto.BoardRequestDto;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board extends BaseTime{
 
     @Id
@@ -33,18 +35,10 @@ public class Board extends BaseTime{
     @OrderBy("createdAt desc")
     private List<Comment> comments = new ArrayList<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private List<BoardLike> boardLikes = new ArrayList<>();
-
-    public Board(BoardRequestDto requestDto) {
-        this.title = requestDto.getTitle();
-        this.content = requestDto.getContent();
-    }
-
-    public Board(BoardRequestDto requestDto, Member member) {
-        this.title = requestDto.getTitle();
-        this.content = requestDto.getContent();
+    @Builder
+    public Board(String title, String content, Member member) {
+        this.title = title;
+        this.content = content;
         this.member = member;
     }
 

@@ -5,6 +5,7 @@ import jpacrud.blog.dto.ResponseDto;
 import jpacrud.blog.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,14 +20,14 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/auth/signup")
-    public ResponseDto signup(@Valid @RequestBody MemberRequestDto requestDto) {
+    public ResponseEntity<ResponseDto> signup(@Valid @RequestBody MemberRequestDto requestDto) {
         memberService.signup(requestDto);
-        return new ResponseDto(HttpStatus.OK.value(),"success");
+        return ResponseEntity.ok(new ResponseDto(HttpStatus.OK,"회원가입 완료"));
     }
 
     @PostMapping("/auth/login")
-    public ResponseDto login(@Valid @RequestBody MemberRequestDto requestDto, HttpServletResponse response) {
+    public ResponseEntity<ResponseDto> login(@Valid @RequestBody MemberRequestDto requestDto, HttpServletResponse response) {
         memberService.login(requestDto, response);
-        return new ResponseDto(HttpStatus.OK.value(),"success");
+        return ResponseEntity.ok(new ResponseDto(HttpStatus.OK,"로그인 완료"));
     }
 }

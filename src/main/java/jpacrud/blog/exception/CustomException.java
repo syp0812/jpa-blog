@@ -1,9 +1,9 @@
 package jpacrud.blog.exception;
 
-public class BlogException extends BaseException{
+public class CustomException extends BaseException{
     private BaseExceptionType exceptionType;
 
-    public BlogException(BaseExceptionType exceptionType) {
+    public CustomException(BaseExceptionType exceptionType) {
         this.exceptionType = exceptionType;
     }
 

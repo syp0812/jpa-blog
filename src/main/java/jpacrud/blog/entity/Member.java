@@ -2,6 +2,7 @@ package jpacrud.blog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +12,6 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Member {
 
@@ -28,20 +28,7 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private MemberRole role;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "member")
-    private List<Board> boards = new ArrayList<>();
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-//    @OrderBy("createdAt desc")
-    private List<Comment> comments = new ArrayList<>();
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<BoardLike> boardLikes = new ArrayList<>();
-
-
+    @Builder
     public Member(String username, String password, MemberRole role) {
         this.username = username;
         this.password = password;

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,33 +26,31 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
 
-    @PostMapping("/boards/new")
-    public BoardResponseDto saveBoard(@RequestBody @Valid BoardRequestDto requestDto,
-                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.saveBoard(requestDto, userDetails.getMember());
+    @PostMapping("/api/boards")
+    public ResponseEntity<ResponseDto> saveBoard(@RequestBody @Valid BoardRequestDto requestDto,
+                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        boardService.saveBoard(requestDto, userDetails.getMember());
+        return ResponseEntity.ok(new ResponseDto(HttpStatus.OK, "등록 완료"));
     }
 
-    @PutMapping("/boards/{id}")
-    public BoardResponseDto updateBoard(@PathVariable Long id,
+    @PutMapping("/api/boards/{id}")
+    public ResponseEntity<ResponseDto>  updateBoard(@PathVariable Long id,
                                    @RequestBody @Valid BoardRequestDto requestDto,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.updateBoard(id, requestDto, userDetails.getMember());
+        boardService.updateBoard(id, requestDto, userDetails.getMember());
+        return ResponseEntity.ok(new ResponseDto(HttpStatus.OK, "수정 완료"));
     }
 
-    @DeleteMapping("/boards/{boardId}")
-    public ResponseDto deleteBoard(@PathVariable Long boardId,
+    @DeleteMapping("/api/boards/{id}")
+    public ResponseEntity<ResponseDto> deleteBoard(@PathVariable Long id,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        boardService.deleteBoard(boardId, userDetails.getMember());
-        return new ResponseDto(HttpStatus.OK.value(), "success");
+        boardService.deleteBoard(id, userDetails.getMember());
+        return ResponseEntity.ok(new ResponseDto(HttpStatus.OK, "삭제 완료"));
     }
 
-    @GetMapping("/boards")
+    @GetMapping("/api/boards")
     public Page<BoardResponseDto> getBoards(Pageable pageable) {
         return boardService.getBoards(pageable);
     }
 
-    @GetMapping("/boards/{id}")
-    public BoardResponseDto getBoard(@PathVariable Long id) {
-        return boardService.findOne(id);
-    }
 }

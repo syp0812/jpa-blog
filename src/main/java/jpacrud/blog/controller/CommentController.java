@@ -7,6 +7,7 @@ import jpacrud.blog.security.UserDetailsImpl;
 import jpacrud.blog.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,25 +18,23 @@ import javax.validation.Valid;
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/boards/{boardId}/comments")
-    public CommentResponseDto saveComment(@PathVariable Long boardId,
-                                          @RequestBody @Valid CommentRequestDto requestDto,
-                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        System.out.println("---------------------------------------------------------------------");
-        System.out.println(requestDto);
-        System.out.println(userDetails.getUsername());
-        return commentService.saveComment(boardId, requestDto, userDetails.getMember());
+    @PostMapping("/api/boards//comments")
+    public ResponseEntity<ResponseDto> saveComment(@PathVariable Long boardId,
+                                                   @RequestBody @Valid CommentRequestDto requestDto) {
+        commentService.saveComment(boardId, requestDto);
+        return ResponseEntity.ok(new ResponseDto(HttpStatus.OK, "등록 완료"));
     }
 
-    @PutMapping("/boards/{boardId}/comments/{commentId}")
-    public CommentResponseDto updateComment(@PathVariable Long boardId, @PathVariable Long commentId,
+    @PutMapping("/api/boards//comments/{commentId}")
+    public ResponseEntity<ResponseDto> updateComment(@PathVariable Long boardId, @PathVariable Long commentId,
                                             @RequestBody CommentRequestDto requestDto) {
-        return commentService.updateComment(boardId, commentId, requestDto);
+        commentService.updateComment(boardId, commentId, requestDto);
+        return ResponseEntity.ok(new ResponseDto(HttpStatus.OK, "수정 완료"));
     }
 
-    @DeleteMapping("/boards/{boardId}/comments/{commentId}")
-    public ResponseDto deleteComment(@PathVariable Long boardId, @PathVariable Long commentId) {
+    @DeleteMapping("/api/boards//comments/{commentId}")
+    public ResponseEntity<ResponseDto> deleteComment(@PathVariable Long boardId, @PathVariable Long commentId) {
         commentService.deleteComment(boardId, commentId);
-        return new ResponseDto(HttpStatus.OK.value(), "success");
+        return ResponseEntity.ok(new ResponseDto(HttpStatus.OK, "삭제 완료"));
     }
 }

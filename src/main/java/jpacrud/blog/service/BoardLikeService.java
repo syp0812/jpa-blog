@@ -3,8 +3,8 @@ package jpacrud.blog.service;
 import jpacrud.blog.entity.Board;
 import jpacrud.blog.entity.BoardLike;
 import jpacrud.blog.entity.Member;
-import jpacrud.blog.exception.BlogException;
-import jpacrud.blog.exception.BlogExceptionType;
+import jpacrud.blog.exception.CustomException;
+import jpacrud.blog.exception.CustomExceptionType;
 import jpacrud.blog.repository.BoardRepository;
 import jpacrud.blog.repository.BoardLikeRepository;
 import jpacrud.blog.repository.MemberRepository;
@@ -24,10 +24,10 @@ public class BoardLikeService {
     @Transactional
     public void saveLike(Long boardId, Member member) {
         memberRepository.findByUsername(member.getUsername()).orElseThrow(
-                () -> new BlogException(BlogExceptionType.MEMBER_NOT_FOUND)
+                () -> new CustomException(CustomExceptionType.MEMBER_NOT_FOUND)
         );
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new BlogException(BlogExceptionType.BOARD_NOT_FOUND)
+                () -> new CustomException(CustomExceptionType.BOARD_NOT_FOUND)
         );
         Optional<BoardLike> like = boardLikeRepository.findByBoardAndMember(board, member);
 
