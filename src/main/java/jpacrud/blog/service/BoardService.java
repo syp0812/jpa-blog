@@ -25,7 +25,12 @@ public class BoardService {
      */
     public BoardResponseDto saveBoard(BoardRequestDto requestDto, Member member) {
         checkMemberExists(memberRepository, member);
-        Board board = boardRepository.save(requestDto.toEntity());
+
+        Board board = Board.builder()
+                .title(requestDto.getTitle())
+                .content(requestDto.getContent())
+                .build();
+        boardRepository.save(requestDto.toEntity());
         return new BoardResponseDto(board);
     }
 
@@ -45,9 +50,9 @@ public class BoardService {
      * 게시글 삭제
      */
     public void deleteBoard(Long id, Member member) {
-        Board board = checkBoardExists(boardRepository, id);
         checkMemberExists(memberRepository, member);
 
+        Board board = checkBoardExists(boardRepository, id);
         boardRepository.delete(board);
     }
 
@@ -66,6 +71,7 @@ public class BoardService {
         Board board = checkBoardExists(boardRepository,boardId);
         return new BoardResponseDto(board);
     }
+
     private Member checkMemberExists(MemberRepository memberRepository, Member member) {
         return memberRepository.findByUsername(member.getUsername()).orElseThrow(
                 () -> new CustomException(CustomExceptionType.MEMBER_NOT_FOUND)

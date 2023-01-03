@@ -1,6 +1,5 @@
 package jpacrud.blog.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpacrud.blog.dto.BoardRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -26,14 +25,16 @@ public class Board extends BaseTime{
     @Column(nullable = false)
     private String content;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board")
     @OrderBy("createdAt desc")
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<BoardLike> boardLikes = new ArrayList<>();
 
     @Builder
     public Board(String title, String content, Member member) {

@@ -2,6 +2,7 @@ package jpacrud.blog.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpacrud.blog.dto.CommentRequestDto;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +21,6 @@ public class Comment extends BaseTime {
 
     @Column(nullable = false)
     private String content;
-
-    private int commentLike;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -31,7 +30,7 @@ public class Comment extends BaseTime {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "comment")
     private List<CommentLike> commentLikes = new ArrayList<>();
 
     @Builder
@@ -39,7 +38,6 @@ public class Comment extends BaseTime {
         this.member = member;
         this.board = board;
         this.content = content;
-        this.commentLike = commentLikes.size();
     }
 
     public void update(CommentRequestDto requestDto) {
